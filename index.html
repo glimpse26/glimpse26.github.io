@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GLIMPSE: Transparent Object Manipulation from Single Human Demonstration</title>
+<meta name="description" content="GLIMPSE enables robots to manipulate transparent objects from task instructions using one human demonstration video of a single object per primitive skill.">
+<meta property="og:title" content="GLIMPSE: Transparent Object Manipulation from Single Human Demonstration">
+<meta property="og:description" content="GLIMPSE turns a single human demonstration per skill into precise, language-conditioned transparent object manipulation.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/images/method_overview.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128300;</text></svg>">
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">GLIMPSE</a>
+    <nav class="navlinks">
+      <a href="#abstract">Abstract</a>
+      <a href="#long-horizon">Demo</a>
+      <a href="#method">Method</a>
+      <a href="#parsing">Parsing</a>
+      <a href="#experiments">Experiments</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="title">GLIMPSE: Transparent Object Manipulation<br>from Single Human Demonstration</h1>
+
+      <!-- Double-blind review: no author list or paper links yet.
+           After acceptance, add an author block and Paper / arXiv / Code badges here. -->
+
+      <p class="tagline">GLIMPSE enables robots to manipulate transparent objects from task instructions
+        using one human demonstration video of a single object per primitive skill</p>
+    </div>
+  </section>
+
+  <!-- ============ TEASER ============ -->
+  <section class="section section-tight">
+    <div class="wrap">
+      <div class="teaser">
+        <figure class="media">
+          <figcaption class="media-label">Human Demonstration</figcaption>
+          <div class="media-box">
+            <video data-src="assets/clips/teaser_human.mp4" data-speed="1" width="822" height="720" autoplay loop muted playsinline preload="none" aria-label="A person demonstrating a manipulation with a transparent object."></video>
+          </div>
+        </figure>
+        <div class="teaser-arrow" aria-hidden="true">&rarr;</div>
+        <figure class="media">
+          <figcaption class="media-label">Robot Manipulation</figcaption>
+          <div class="media-box">
+            <video data-src="assets/clips/teaser_robot.mp4" data-speed="1" width="662" height="580" autoplay loop muted playsinline preload="none" aria-label="The robot reproducing the demonstrated skill on a transparent object."></video>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABSTRACT ============ -->
+  <section class="section" id="abstract">
+    <div class="wrap wrap-narrow">
+      <h2>Abstract</h2>
+      <p class="abstract">
+        Despite advances in transparent-object manipulation, transferring a single human demonstration per skill
+        across transparent instances and composing the resulting skills under language instructions remains
+        challenging. We propose <strong>GLIMPSE</strong>, a unified framework built on transparent object perception,
+        demonstration transfer, and vision-language planning, which turns a single human demonstration per skill into
+        precise, language-conditioned manipulation ranging from short-horizon grasping to long-horizon sequences.
+        A key advantage of our framework is robust transparent object perception module, which recovers reliable
+        metric depth, and 6D pose despite the refraction and missing depth that defeat conventional sensors.
+        Our mask-and-depth pose ranking compares hypotheses against the observed mask and depth rather than unreliable
+        RGB, providing accurate object-centric 6D poses, from which we retarget the single demonstrated trajectory to
+        novel objects. We further present a task planner that refines VLM-generated plans under single-arm eye-in-hand
+        constraints and composes long-horizon plans from 15 primitive actions built from six demonstration-derived
+        manipulation skills together with parameterized and auxiliary primitives. Real-world trials on 6 tasks with
+        31 objects under varied lighting, occlusion, and tight-space scenarios, GLIMPSE outperforms existing methods.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ LONG-HORIZON (2-slide carousel) ============ -->
+  <section class="section" id="long-horizon">
+    <div class="wrap">
+      <h2>Long-Horizon Task Demonstration</h2>
+      <div class="carousel media-wide" data-carousel>
+        <div class="carousel-track">
+          <div class="carousel-slide is-active">
+            <div class="media-box">
+              <video data-src="assets/clips/long_horizon_1.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Long-horizon task demonstration 1: making green liquid in the cylinder."></video>
+            </div>
+          </div>
+          <div class="carousel-slide" hidden>
+            <div class="media-box">
+              <video data-src="assets/clips/long_horizon_2.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Long-horizon task demonstration 2."></video>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-prev" type="button" aria-label="Previous demonstration">&#8249;</button>
+        <button class="carousel-btn carousel-next" type="button" aria-label="Next demonstration">&#8250;</button>
+        <div class="carousel-dots" role="tablist">
+          <button class="carousel-dot is-active" type="button" role="tab" aria-label="Demonstration 1" aria-selected="true"></button>
+          <button class="carousel-dot" type="button" role="tab" aria-label="Demonstration 2" aria-selected="false"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METHOD ============ -->
+  <section class="section" id="method">
+    <div class="wrap">
+      <h2>Method</h2>
+      <figure class="figure">
+        <img src="assets/images/method_overview.jpg" width="1280" height="589" alt="Overview of the proposed GLIMPSE framework." loading="lazy">
+        <figcaption>Overview of the proposed GLIMPSE framework.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ PARSING ============ -->
+  <section class="section" id="parsing">
+    <div class="wrap">
+      <h2>Parsing Human Demonstration</h2>
+
+      <div class="colheads">
+        <div class="colhead">Human Demonstration</div>
+        <div class="colhead">6D Pose Trajectories</div>
+      </div>
+
+      <div class="grid grid-2 grid-pairs">
+        <figure class="media"><figcaption class="media-label label-mobile">Human Demonstration</figcaption><div class="media-box"><video data-src="assets/clips/parse_1.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Human demonstration 1."></video></div></figure>
+        <figure class="media"><figcaption class="media-label label-mobile">6D Pose Trajectory</figcaption><div class="media-box"><video data-src="assets/clips/pose_1.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="6D pose trajectory extracted from demonstration 1."></video></div></figure>
+
+        <figure class="media"><figcaption class="media-label label-mobile">Human Demonstration</figcaption><div class="media-box"><video data-src="assets/clips/parse_2.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Human demonstration 2."></video></div></figure>
+        <figure class="media"><figcaption class="media-label label-mobile">6D Pose Trajectory</figcaption><div class="media-box"><video data-src="assets/clips/pose_2.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="6D pose trajectory extracted from demonstration 2."></video></div></figure>
+
+        <figure class="media"><figcaption class="media-label label-mobile">Human Demonstration</figcaption><div class="media-box"><video data-src="assets/clips/parse_3.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Human demonstration 3."></video></div></figure>
+        <figure class="media"><figcaption class="media-label label-mobile">6D Pose Trajectory</figcaption><div class="media-box"><video data-src="assets/clips/pose_3.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="6D pose trajectory extracted from demonstration 3."></video></div></figure>
+
+        <figure class="media"><figcaption class="media-label label-mobile">Human Demonstration</figcaption><div class="media-box"><video data-src="assets/clips/parse_4.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Human demonstration 4."></video></div></figure>
+        <figure class="media"><figcaption class="media-label label-mobile">6D Pose Trajectory</figcaption><div class="media-box"><video data-src="assets/clips/pose_4.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="6D pose trajectory extracted from demonstration 4."></video></div></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIMENTS ============ -->
+  <section class="section" id="experiments">
+    <div class="wrap">
+      <h2>Experiments</h2>
+
+      <figure class="media media-wide">
+        <div class="media-box media-video">
+          <video data-src="assets/videos/exp_tasks.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none"></video>
+        </div>
+      </figure>
+
+      <h3>Diverse Environments</h3>
+      <figure class="media media-wide">
+        <div class="media-box media-video">
+          <video data-src="assets/videos/exp_environments.mp4" data-speed="1" width="1280" height="682" autoplay loop muted playsinline preload="none"></video>
+        </div>
+      </figure>
+
+      <h3>Challenging Lighting Conditions</h3>
+      <figure class="media media-wide">
+        <div class="media-box media-video">
+          <video data-src="assets/videos/exp_lighting.mp4" data-speed="1" width="1280" height="682" autoplay loop muted playsinline preload="none"></video>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS: PLACEMENT ============ -->
+  <section class="section" id="placement">
+    <div class="wrap">
+      <h3 class="task-title">Placement &ndash; Tight Shelf Retrieval</h3>
+      <div class="grid grid-3">
+        <figure class="media">
+          <figcaption class="media-label">Place the <em>cola</em> on the <em>coaster</em></figcaption>
+          <div class="media-box"><video data-src="assets/clips/place_coke.mp4" data-speed="1" width="720" height="720" autoplay loop muted playsinline preload="none" aria-label="Robot placing the cola on the coaster."></video></div>
+        </figure>
+        <figure class="media">
+          <figcaption class="media-label">Place the <em>water</em> on the <em>coaster</em></figcaption>
+          <div class="media-box"><video data-src="assets/clips/place_water.mp4" data-speed="1" width="720" height="720" autoplay loop muted playsinline preload="none" aria-label="Robot placing the water on the coaster."></video></div>
+        </figure>
+        <figure class="media">
+          <figcaption class="media-label">Place the <em>blue bottle</em> on the <em>coaster</em></figcaption>
+          <div class="media-box"><video data-src="assets/clips/place_blue.mp4" data-speed="1" width="720" height="720" autoplay loop muted playsinline preload="none" aria-label="Robot placing the blue bottle on the coaster."></video></div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS: REARRANGEMENT ============ -->
+  <section class="section" id="rearrangement">
+    <div class="wrap">
+      <h3 class="task-title">Rearrangement &ndash; Grocery Stocking</h3>
+      <div class="grid grid-2">
+        <figure class="media">
+          <figcaption class="media-label">Arrange the <em>cola</em> on the <em>shelf</em></figcaption>
+          <div class="media-box"><video data-src="assets/clips/arrange_cola.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Robot arranging the cola on the shelf."></video></div>
+        </figure>
+        <figure class="media">
+          <figcaption class="media-label">Arrange the <em>cola and water</em> on the <em>shelf</em></figcaption>
+          <div class="media-box"><video data-src="assets/clips/arrange_colar_water.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Robot arranging the cola and water on the shelf."></video></div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS: POURING ============ -->
+  <section class="section" id="pouring">
+    <div class="wrap">
+      <h3 class="task-title">Pouring &ndash; Color Mixing</h3>
+      <div class="grid grid-2">
+        <figure class="media">
+          <figcaption class="media-label">Make <em>turquoise</em> liquid in the <em>measuring bowl</em></figcaption>
+          <div class="media-box"><video data-src="assets/clips/pour_turquoise.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Robot making turquoise liquid in the measuring bowl."></video></div>
+        </figure>
+        <figure class="media">
+          <figcaption class="media-label">Make <em>green</em> liquid in the <em>cylinder</em></figcaption>
+          <div class="media-box"><video data-src="assets/clips/pour_green.mp4" data-speed="1" width="1280" height="720" autoplay loop muted playsinline preload="none" aria-label="Robot making green liquid in the cylinder."></video></div>
+        </figure>
+      </div>
+      <p class="note">All experimental videos were played at 5&times; speed.</p>
+    </div>
+  </section>
+
+</main>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
